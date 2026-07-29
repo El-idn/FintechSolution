@@ -1,0 +1,46 @@
+### Domain E2E smoke (Option A)
+### Prerequisites: RabbitMQ on localhost:5672, SQL Server DBs, services running on launchSettings ports
+
+@gateway = http://localhost:5086
+@auth = http://localhost:5258
+@account = http://localhost:5018
+@payment = http://localhost:5150
+
+### 1. Register (Auth)
+# POST {{auth}}/api/auth/register
+# Content-Type: application/json
+#
+# { "email": "smoke@fintech.local", "password": "Password1", "userName": "smokeuser" }
+
+### 2. Login
+# @name login
+POST {{auth}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "smoke@fintech.local",
+  "password": "Password1"
+}
+
+### 3. Create account
+# POST {{account}}/api/accounts
+# Authorization: Bearer {{login.response.body.accessToken}}
+# Content-Type: application/json
+#
+# { "accountType": "Savings", "initialDeposit": 1000 }
+
+### 4. Create payment via gateway
+# POST {{gateway}}/api/payments
+# Authorization: Bearer {{token}}
+# Content-Type: application/json
+# Idempotency-Key: smoke-1
+#
+# { "accountId": "{{accountId}}", "amount": 25, "currency": "EUR", "reference": "SMOKE-1", "description": "Smoke payment" }
+
+### 5. Process payment (triggers outbox -> RabbitMQ -> Account debit + Notification)
+# POST {{payment}}/api/v1/Payments/{{paymentId}}/process
+# Authorization: Bearer {{token}}
+
+### 6. Confirm balance changed
+# GET {{account}}/api/accounts/{{accountId}}
+# Authorization: Bearer {{token}}

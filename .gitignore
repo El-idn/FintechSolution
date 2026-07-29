@@ -1,0 +1,65 @@
+## .NET
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+[Ll]ogs/
+*.userlog
+*.user
+*.userproj
+*.suo
+*.useruser
+*.userosscache
+*.sln.docstates
+*.rsuser
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+## Visual Studio / VS Code
+.vs/
+*.swp
+*.swo
+.idea/
+
+## NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Secrets / local
+appsettings.*.local.json
+*.pfx
+*.key
+.env
+.env.*
+
+## OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+## Test / coverage
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+## Rider
+.idea/
+*.sln.iml

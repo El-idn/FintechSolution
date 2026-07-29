@@ -1,0 +1,29 @@
+{
+  "folders": [
+    {
+      "path": "AuthService"
+    },
+    {
+      "path": "AccountService"
+    },
+    {
+      "path": "NotificationService"
+    },
+    {
+      "path": "TransactionService"
+    },
+    {
+      "path": "SharedKernel"
+    }
+  ],
+  "settings": {
+    "omnisharp.useModernNet": true,
+    "omnisharp.enableImportCompletion": true,
+    "omnisharp.enableRoslynAnalyzers": true,
+    "dotnet.defaultSolution": "FintechSolution.sln",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "csharp.format.enable": true
+  }
+}

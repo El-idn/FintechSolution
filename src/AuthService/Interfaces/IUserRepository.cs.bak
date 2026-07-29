@@ -1,0 +1,12 @@
+using System.Threading.Tasks;
+using AuthService.Domain.Entities;
+
+namespace AuthService.Interfaces;
+
+public interface IUserRepository
+{
+    Task<User?> GetByEmailAsync(string email);
+    Task<User?> GetByIdAsync(Guid userId); // 👈 Add this
+    Task AddAsync(User user);
+    Task UpdateAsync(User user);
+}

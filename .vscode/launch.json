@@ -1,0 +1,102 @@
+{
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Run All Services",
+      "configurations": [
+        "Run AuthService",
+        "Run AccountService",
+        "Run TransactionService",
+        "Run PaymentService",
+        "Run NotificationService",
+        "Run WalletService",
+        "Run ApiGateway"
+      ]
+    },
+    {
+      "name": "Run OBN Test Services",
+      "configurations": [
+        "Run AuthService",
+        "Run TransactionService",
+        "Run NotificationService"
+      ]
+    }
+  ],
+  "configurations": [
+    {
+      "name": ".NET Core Attach",
+      "type": "coreclr",
+      "request": "attach"
+    },
+    {
+      "name": "Run AccountService",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/AccountService/bin/Debug/net8.0/AccountService.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/AccountService",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Run NotificationService",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/NotificationService/bin/Debug/net8.0/NotificationService.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/NotificationService",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Run WalletService",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/WalletService/bin/Debug/net8.0/WalletService.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/WalletService",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Run ApiGateway",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/APIGateway/bin/Debug/net8.0/APIGateway.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/APIGateway",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Run AuthService",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/AuthService/bin/Debug/net8.0/AuthService.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/AuthService",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Run TransactionService",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/TransactionService/bin/Debug/net8.0/TransactionService.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/TransactionService",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Run PaymentService",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/PaymentService/bin/Debug/net9.0/PaymentService.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/PaymentService",
+      "stopAtEntry": false
+    }
+  ]
+}

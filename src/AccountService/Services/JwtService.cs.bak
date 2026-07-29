@@ -1,0 +1,77 @@
+public class JwtService : IJwtService
+{
+    private readonly IConfiguration _config;
+    private readonly IRefreshTokenRepository _refreshTokenRepo;
+
+    public JwtService(IConfiguration config, IRefreshTokenRepository refreshTokenRepo)
+    {
+        _config = config;
+        _refreshTokenRepo = refreshTokenRepo;
+    }
+
+    public async Task<(string AccessToken, string RefreshToken)> GenerateTokensAsync(User user)
+    {
+        var accessToken = GenerateJwtToken(user);
+        var refreshToken = GenerateRefreshToken();
+
+        var tokenEntity = new RefreshToken
+        {
+            UserId = user.Id,
+            Token = refreshToken,
+            ExpiresAt = DateTime.UtcNow.AddDays(7),
+            CreatedAt = DateTime.UtcNow,
+            IsRevoked = false
+        };
+
+        await _refreshTokenRepo.SaveAsync(tokenEntity);
+
+        return (accessToken, refreshToken);
+    }
+
+    public async Task<(string AccessToken, string RefreshToken)?> RefreshTokensAsync(string refreshToken)
+    {
+        var tokenEntity = await _refreshTokenRepo.GetByTokenAsync(refreshToken);
+        if (tokenEntity == null || tokenEntity.IsRevoked || tokenEntity.ExpiresAt < DateTime.UtcNow)
+            return null;
+
+        var user = await _refreshTokenRepo.GetUserByIdAsync(tokenEntity.UserId);
+        if (user == null)
+            return null;
+
+        // Revoke old token
+        tokenEntity.IsRevoked = true;
+        await _refreshTokenRepo.UpdateAsync(tokenEntity);
+
+        // Issue new tokens
+        return await GenerateTokensAsync(user);
+    }
+
+    private string GenerateJwtToken(User user)
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.Role),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: _config["Jwt:Issuer"],
+            audience: _config["Jwt:Audience"],
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(15),
+            signingCredentials: creds
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    private string GenerateRefreshToken()
+    {
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+    }
+}
